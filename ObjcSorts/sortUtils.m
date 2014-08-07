@@ -23,6 +23,17 @@ BOOL arrayIsSorted(NSMutableArray *arr)
     return YES;
 }
 
+NSInteger *randomUnboxedIntegerArray(NSUInteger count)
+{    
+    NSInteger *integers = malloc(sizeof(*integers) * count);
+    
+    for (NSUInteger i = 0; i < count; i++) {
+        integers[i] = arc4random_uniform(UINT32_MAX);
+    }
+
+    return integers;
+}
+
 NSMutableArray* randomIntegerArray(NSUInteger count)
 {
     NSLog(@"Generating array of %ld random integers in range [0, %u)...", count, UINT32_MAX);

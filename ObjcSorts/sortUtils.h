@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, SortAlgorithmType) {
 };
 
 NSMutableArray* randomIntegerArray(NSUInteger count);
+NSInteger *randomUnboxedIntegerArray(NSUInteger count);
 
 BOOL arrayIsSorted(NSMutableArray *arr);
 

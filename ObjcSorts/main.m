@@ -29,6 +29,31 @@ int main(int argc, const char * argv[]) {
                                    @(SortAlgorithmTypeBubble),
                                    nil];
         
+
+        // Baseline
+        {
+            CFAbsoluteTime total = 0;
+            for (NSUInteger trial = 0; trial < NUM_TRIALS; trial++) {
+                CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+                NSInteger *unsortUnboxedIntegers = randomUnboxedIntegerArray(MAX_COUNT);
+                qsort_b(unsortUnboxedIntegers, MAX_COUNT, sizeof(*unsortUnboxedIntegers), ^int(const void *p1, const void *p2) {
+                    NSInteger a = *(const NSInteger *)p1;
+                    NSInteger b = *(const NSInteger *)p2;
+                    
+                    if (a < b)
+                        return 1;
+                    if (a > b)
+                        return -1;
+                    return 0;
+                });
+                CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();
+                total += (end - start);
+                free(unsortUnboxedIntegers);
+            }
+            
+            NSLog(@"Baseline: %fs", total/NUM_TRIALS);
+        }
+        
         NSMutableDictionary *averageSortTimes = [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@(0.0), @(0.0), @(0.0), @(0.0), @(0.0), @(0.0), @(0.0), nil]
                                                                                    forKeys:sortAlgorithms];
         
@@ -36,7 +61,7 @@ int main(int argc, const char * argv[]) {
             NSLog(@"\n\n::: TRIAL %ld :::", t);
             
             NSMutableArray *unsortedArray = randomIntegerArray(MAX_COUNT);
-            
+
             for (NSNumber *sort in sortAlgorithms) {
                 NSUInteger sortType = sort.integerValue;
                 
